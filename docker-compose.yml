@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  app:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    image: alhoqbani/dvwa-php:7.2
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www/html
+    networks:
+      - net
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 33306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: dvwa_db
+      MYSQL_USER: dvwa_user
+      MYSQL_PASSWORD: dvwa_secret
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
